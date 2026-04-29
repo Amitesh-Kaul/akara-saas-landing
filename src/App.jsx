@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
+const S = { fontFamily: "'Cormorant Garamond', serif" };
+const M = { fontFamily: "'Space Mono', monospace" };
+const I = { fontFamily: "'Inter', sans-serif" };
+
 const NAV_LINKS = ["Services", "Work", "About", "Contact"];
 
 const SERVICES = [
@@ -38,31 +42,24 @@ const PROJECTS = [
   { title: "QA Automation Suite", tag: "QA Testing", img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80" },
 ];
 
-// ── 3D Canvas Component ──────────────────────────────────────────
 function ThreeBackground() {
   const mountRef = useRef(null);
-
   useEffect(() => {
     const mount = mountRef.current;
     const W = mount.clientWidth;
     const H = mount.clientHeight;
-
-    // Scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 1000);
     camera.position.z = 22;
-
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(0x000000, 0);
     mount.appendChild(renderer.domElement);
 
-    // Gold color
     const gold = new THREE.Color("#C9A84C");
     const dimGold = new THREE.Color("#7a6020");
 
-    // ── Floating particles ──
     const particleCount = 200;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -71,9 +68,7 @@ function ThreeBackground() {
       positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 40;
       const c = Math.random() > 0.5 ? gold : dimGold;
-      colors[i * 3] = c.r;
-      colors[i * 3 + 1] = c.g;
-      colors[i * 3 + 2] = c.b;
+      colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
     }
     const partGeo = new THREE.BufferGeometry();
     partGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
@@ -82,110 +77,91 @@ function ThreeBackground() {
     const particles = new THREE.Points(partGeo, partMat);
     scene.add(particles);
 
-    // ── Wireframe torus knot ──
     const torusGeo = new THREE.TorusKnotGeometry(14, 2.5, 200, 20);
     const torusMat = new THREE.MeshBasicMaterial({ color: "#C9A84C", wireframe: true, transparent: true, opacity: 0.35 });
     const torus = new THREE.Mesh(torusGeo, torusMat);
     scene.add(torus);
 
-    // ── Wireframe icosahedron ──
     const icoGeo = new THREE.IcosahedronGeometry(10, 1);
     const icoMat = new THREE.MeshBasicMaterial({ color: "#C9A84C", wireframe: true, transparent: true, opacity: 0.4 });
     const ico = new THREE.Mesh(icoGeo, icoMat);
-    ico.position.set(18, -5, -5);
+    ico.position.set(18, -4, -5);
     scene.add(ico);
 
-    // ── Wireframe octahedron ──
     const octGeo = new THREE.OctahedronGeometry(7, 0);
     const octMat = new THREE.MeshBasicMaterial({ color: "#C9A84C", wireframe: true, transparent: true, opacity: 0.45 });
     const oct = new THREE.Mesh(octGeo, octMat);
-    oct.position.set(-20, 6, -3);
+    oct.position.set(-20, 8, -3);
     scene.add(oct);
 
-    // ── Grid plane ──
     const gridHelper = new THREE.GridHelper(80, 30, "#C9A84C", "#1a1400");
     gridHelper.position.y = -18;
     gridHelper.material.transparent = true;
     gridHelper.material.opacity = 0.35;
     scene.add(gridHelper);
 
-    // ── Connecting lines between random points ──
     const lineMat = new THREE.LineBasicMaterial({ color: "#C9A84C", transparent: true, opacity: 0.2 });
     for (let i = 0; i < 20; i++) {
       const pts = [
         new THREE.Vector3((Math.random() - 0.5) * 60, (Math.random() - 0.5) * 40, (Math.random() - 0.5) * 20),
         new THREE.Vector3((Math.random() - 0.5) * 60, (Math.random() - 0.5) * 40, (Math.random() - 0.5) * 20),
       ];
-      const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
-      scene.add(new THREE.Line(lineGeo, lineMat));
+      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
     }
 
-    // Mouse parallax
     let mouseX = 0, mouseY = 0;
     const onMouseMove = (e) => {
       mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
     };
     window.addEventListener("mousemove", onMouseMove);
-
-    // Resize
     const onResize = () => {
-      const w = mount.clientWidth;
-      const h = mount.clientHeight;
-      camera.aspect = w / h;
+      camera.aspect = mount.clientWidth / mount.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(mount.clientWidth, mount.clientHeight);
     };
     window.addEventListener("resize", onResize);
 
-    // Animation loop
     let frame = 0;
+    let animId;
     const animate = () => {
+      animId = requestAnimationFrame(animate);
       frame++;
       const t = frame * 0.005;
-
       torus.rotation.x = t * 0.3;
       torus.rotation.y = t * 0.5;
-
       ico.rotation.x = t * 0.4;
       ico.rotation.y = t * 0.3;
-
       oct.rotation.x = t * 0.5;
       oct.rotation.z = t * 0.4;
-
       particles.rotation.y = t * 0.05;
       particles.rotation.x = t * 0.02;
-
-      // Parallax camera
       camera.position.x += (mouseX * 3 - camera.position.x) * 0.02;
       camera.position.y += (-mouseY * 2 - camera.position.y) * 0.02;
       camera.lookAt(scene.position);
-
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
     };
     animate();
 
     return () => {
+      cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
-      mount.removeChild(renderer.domElement);
+      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
       renderer.dispose();
     };
   }, []);
-
   return <div ref={mountRef} className="absolute inset-0 w-full h-full" />;
 }
 
-// ── Main App ─────────────────────────────────────────────────────
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredProject, setHoveredProject] = useState(null);
 
   return (
-    <div className="bg-[#0a0a0a] text-white min-h-screen font-sans overflow-x-hidden">
+    <div className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden" style={I}>
 
-      {/* Global 3D Background — covers entire page */}
+      {/* Global 3D Background */}
       <div className="fixed inset-0 w-full h-full z-0">
         <ThreeBackground />
       </div>
@@ -198,17 +174,17 @@ export default function App() {
               <polygon points="24,4 44,40 4,40" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinejoin="round"/>
               <circle cx="24" cy="24" r="3" fill="#C9A84C"/>
             </svg>
-            <span className="text-lg font-medium tracking-widest text-[#C9A84C]">AKARA</span>
+            <span className="text-lg font-medium tracking-widest text-[#C9A84C]" style={M}>AKARA</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
               <a key={link} href={`#${link.toLowerCase()}`}
-                className="text-sm text-white/60 hover:text-[#C9A84C] transition-colors duration-200 tracking-wide">
+                className="text-sm text-white/60 hover:text-[#C9A84C] transition-colors duration-200" style={M}>
                 {link}
               </a>
             ))}
             <a href="#contact"
-              className="text-sm px-5 py-2 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200 tracking-wide">
+              className="text-sm px-5 py-2 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200" style={M}>
               Get in Touch
             </a>
           </div>
@@ -220,7 +196,7 @@ export default function App() {
           <div className="md:hidden bg-[#111] border-t border-white/5 px-6 py-4 flex flex-col gap-4">
             {NAV_LINKS.map((link) => (
               <a key={link} href={`#${link.toLowerCase()}`}
-                className="text-sm text-white/60 hover:text-[#C9A84C] transition-colors">{link}</a>
+                className="text-sm text-white/60 hover:text-[#C9A84C] transition-colors" style={M}>{link}</a>
             ))}
           </div>
         )}
@@ -228,30 +204,25 @@ export default function App() {
 
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
-
-        {/* Dark overlay to keep text readable */}
         <div className="absolute inset-0 bg-[#0a0a0a]/10 z-10 pointer-events-none"/>
-
         <div className="relative z-20 max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 border border-[#C9A84C]/30 bg-[#C9A84C]/5 backdrop-blur-sm px-4 py-2 rounded-full mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse"/>
-            <p className="text-[#C9A84C] text-xs tracking-[3px] uppercase">Available for new projects</p>
+            <p className="text-[#C9A84C] text-xs" style={M}>● AVAILABLE FOR NEW PROJECTS</p>
           </div>
-          <h1 className="text-6xl md:text-8xl font-light leading-none mb-6 tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-light leading-none mb-6 tracking-tight" style={S}>
             Giving shape to
             <br/>
-            <span className="text-[#C9A84C]">great ideas.</span>
+            <span className="text-[#C9A84C]" style={S}>great ideas.</span>
           </h1>
-          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={I}>
             We are Akara Technologies — an Indian tech studio building premium digital products for global clients across US, UK and Europe.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="#work"
-              className="px-8 py-4 bg-[#C9A84C] text-black text-sm font-medium tracking-widest hover:bg-[#b8973d] transition-all duration-200">
+            <a href="#work" className="px-8 py-4 bg-[#C9A84C] text-black text-sm font-medium hover:bg-[#b8973d] transition-all duration-200" style={M}>
               VIEW OUR WORK
             </a>
-            <a href="#contact"
-              className="px-8 py-4 border border-white/20 text-white/70 text-sm tracking-widest hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200">
+            <a href="#contact" className="px-8 py-4 border border-white/20 text-white/70 text-sm hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200" style={M}>
               START A PROJECT
             </a>
           </div>
@@ -259,35 +230,36 @@ export default function App() {
             {["UI Design", "Web Dev", "QA Testing"].map((s, i) => (
               <div key={s} className="border border-white/10 bg-black/30 backdrop-blur-sm p-4 text-center hover:border-[#C9A84C]/40 transition-all">
                 <div className="text-[#C9A84C] text-2xl mb-2">{["▣", "⟨/⟩", "✓"][i]}</div>
-                <p className="text-white/50 text-xs tracking-wide">{s}</p>
+                <p className="text-white/50 text-xs" style={M}>{s}</p>
               </div>
             ))}
           </div>
         </div>
-
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-          <span className="text-xs tracking-widest text-white/30">SCROLL</span>
+          <span className="text-xs text-white/30" style={M}>SCROLL</span>
           <div className="w-px h-12 bg-gradient-to-b from-[#C9A84C] to-transparent"/>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="relative z-10 border-y border-white/5 py-16 px-6">
+      <section className="relative z-10 border-y border-white/5 py-16 px-6 bg-[#0a0a0a]/60 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
           {STATS.map((stat) => (
             <div key={stat.label} className="text-center">
-              <p className="text-3xl md:text-4xl font-light text-[#C9A84C] mb-2">{stat.number}</p>
-              <p className="text-white/40 text-xs tracking-widest uppercase">{stat.label}</p>
+              <p className="text-3xl md:text-4xl font-light text-[#C9A84C] mb-2" style={S}>{stat.number}</p>
+              <p className="text-white/40 text-xs" style={M}>{stat.label}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Services */}
-      <section id="services" className="relative z-10 py-24 px-6">
+      <section id="services" className="relative z-10 py-24 px-6 bg-[#0a0a0a]/60 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto">
-          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4">What We Do</p>
-          <h2 className="text-3xl md:text-5xl font-light mb-16 max-w-xl leading-tight">Services built for results.</h2>
+          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4" style={M}>What We Do</p>
+          <h2 className="text-3xl md:text-5xl font-light mb-16 max-w-xl leading-tight" style={S}>
+            Services built for results.
+          </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {SERVICES.map((service) => (
               <div key={service.title}
@@ -299,8 +271,8 @@ export default function App() {
                   <p className="absolute bottom-4 left-6 text-[#C9A84C] text-3xl">{service.icon}</p>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-lg font-medium mb-3 group-hover:text-[#C9A84C] transition-colors">{service.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">{service.desc}</p>
+                  <h3 className="text-lg font-medium mb-3 group-hover:text-[#C9A84C] transition-colors" style={S}>{service.title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed" style={I}>{service.desc}</p>
                 </div>
               </div>
             ))}
@@ -309,10 +281,12 @@ export default function App() {
       </section>
 
       {/* Work */}
-      <section id="work" className="relative z-10 py-24 px-6 border-t border-white/5">
+      <section id="work" className="relative z-10 py-24 px-6 bg-[#0a0a0a]/60 backdrop-blur-sm border-t border-white/5">
         <div className="max-w-6xl mx-auto">
-          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4">Our Work</p>
-          <h2 className="text-3xl md:text-5xl font-light mb-16 max-w-xl leading-tight">Projects we are proud of.</h2>
+          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4" style={M}>Our Work</p>
+          <h2 className="text-3xl md:text-5xl font-light mb-16 max-w-xl leading-tight" style={S}>
+            Projects we are proud of.
+          </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {PROJECTS.map((project, i) => (
               <div key={project.title}
@@ -325,12 +299,12 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent"/>
                 </div>
                 <div className="p-6">
-                  <p className="text-white/20 text-xs tracking-widest mb-2">0{i + 1}</p>
-                  <h3 className="text-xl font-light mb-1 group-hover:text-[#C9A84C] transition-colors">{project.title}</h3>
-                  <p className="text-white/30 text-sm">{project.tag} · Concept Project · 2024</p>
+                  <p className="text-white/20 text-xs mb-2" style={M}>0{i + 1}</p>
+                  <h3 className="text-xl font-light mb-1 group-hover:text-[#C9A84C] transition-colors" style={S}>{project.title}</h3>
+                  <p className="text-white/30 text-sm" style={M}>{project.tag} · Concept Project · 2024</p>
                 </div>
                 {hoveredProject === i && (
-                  <div className="absolute top-4 right-4 bg-[#C9A84C] text-black text-xs px-3 py-1 tracking-widest font-medium">VIEW →</div>
+                  <div className="absolute top-4 right-4 bg-[#C9A84C] text-black text-xs px-3 py-1 font-medium" style={M}>VIEW →</div>
                 )}
               </div>
             ))}
@@ -339,30 +313,32 @@ export default function App() {
       </section>
 
       {/* About */}
-      <section id="about" className="relative z-10 py-24 px-6 border-t border-white/5">
+      <section id="about" className="relative z-10 py-24 px-6 bg-[#0a0a0a]/60 backdrop-blur-sm border-t border-white/5">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-0 overflow-hidden border border-white/10">
           <div className="relative h-80 md:h-auto overflow-hidden">
             <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80"
               alt="team" className="w-full h-full object-cover opacity-40"/>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a]"/>
             <div className="absolute bottom-8 left-8">
-              <p className="text-[#C9A84C] text-4xl font-light">A·K·A</p>
-              <p className="text-white/30 text-xs tracking-widest mt-1">AMITESH · AKHIL · AKARA</p>
+              <p className="text-[#C9A84C] text-4xl font-light" style={S}>A·K·A</p>
+              <p className="text-white/30 text-xs mt-1" style={M}>AMITESH · AKHIL · AKARA</p>
             </div>
           </div>
-          <div className="p-10 md:p-12 flex flex-col justify-center">
-            <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4">About Us</p>
-            <h2 className="text-3xl md:text-4xl font-light mb-6 leading-tight">Indian talent.<br/>Global standards.</h2>
-            <p className="text-white/40 leading-relaxed mb-4 text-sm">
+          <div className="p-10 md:p-12 flex flex-col justify-center bg-[#0a0a0a]/40">
+            <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4" style={M}>About Us</p>
+            <h2 className="text-3xl md:text-4xl font-light mb-6 leading-tight" style={S}>
+              Indian talent.<br/>Global standards.
+            </h2>
+            <p className="text-white/40 leading-relaxed mb-4 text-sm" style={I}>
               Akara — meaning form and shape in Sanskrit — was founded by Amitesh and Akhil with one goal: to build digital products that look world-class and work flawlessly.
             </p>
-            <p className="text-white/40 leading-relaxed mb-8 text-sm">
+            <p className="text-white/40 leading-relaxed mb-8 text-sm" style={I}>
               Based in India, we work with clients across the US, UK and Europe — delivering premium UI, web development and QA services at honest prices.
             </p>
             <div className="grid grid-cols-2 gap-3">
               {["UI Design", "React & Next.js", "QA & Testing", "Web Apps"].map((skill) => (
                 <div key={skill} className="border border-white/10 px-4 py-3 text-center hover:border-[#C9A84C]/40 transition-all">
-                  <p className="text-white/50 text-xs tracking-wide">{skill}</p>
+                  <p className="text-white/50 text-xs" style={M}>{skill}</p>
                 </div>
               ))}
             </div>
@@ -371,51 +347,55 @@ export default function App() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="relative z-10 py-24 px-6 border-t border-white/5 overflow-hidden">
+      <section id="contact" className="relative z-10 py-24 px-6 bg-[#0a0a0a]/60 backdrop-blur-sm border-t border-white/5">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#C9A84C] opacity-5 blur-3xl pointer-events-none"/>
         <div className="max-w-3xl mx-auto text-center relative z-10">
-          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4">Get In Touch</p>
-          <h2 className="text-3xl md:text-5xl font-light mb-6 leading-tight">Ready to build<br/>something great?</h2>
-          <p className="text-white/40 mb-10 leading-relaxed">Tell us about your project and we will get back to you within 24 hours.</p>
+          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4" style={M}>Get In Touch</p>
+          <h2 className="text-3xl md:text-5xl font-light mb-6 leading-tight" style={S}>
+            Ready to build<br/>something great?
+          </h2>
+          <p className="text-white/40 mb-10 leading-relaxed" style={I}>
+            Tell us about your project and we will get back to you within 24 hours.
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <a href="mailto:hello@akaratechnologies.com"
-              className="px-10 py-4 bg-[#C9A84C] text-black text-sm font-medium tracking-widest hover:bg-[#b8973d] transition-all duration-200">
+              className="px-10 py-4 bg-[#C9A84C] text-black text-sm font-medium hover:bg-[#b8973d] transition-all duration-200" style={M}>
               SEND US AN EMAIL
             </a>
             <a href="#"
-              className="px-10 py-4 border border-white/20 text-white/60 text-sm tracking-widest hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200">
+              className="px-10 py-4 border border-white/20 text-white/60 text-sm hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200" style={M}>
               BOOK A CALL
             </a>
           </div>
           <div className="flex flex-col sm:flex-row gap-8 justify-center">
             <div>
-              <p className="text-white/20 text-xs tracking-widest mb-1">EMAIL</p>
-              <p className="text-white/50 text-sm">hello@akaratechnologies.com</p>
+              <p className="text-white/20 text-xs mb-1" style={M}>EMAIL</p>
+              <p className="text-white/50 text-sm" style={I}>hello@akaratechnologies.com</p>
             </div>
             <div>
-              <p className="text-white/20 text-xs tracking-widest mb-1">BASED IN</p>
-              <p className="text-white/50 text-sm">India · Serving Globally</p>
+              <p className="text-white/20 text-xs mb-1" style={M}>BASED IN</p>
+              <p className="text-white/50 text-sm" style={I}>India · Serving Globally</p>
             </div>
             <div>
-              <p className="text-white/20 text-xs tracking-widest mb-1">RESPONSE TIME</p>
-              <p className="text-white/50 text-sm">Within 24 hours</p>
+              <p className="text-white/20 text-xs mb-1" style={M}>RESPONSE TIME</p>
+              <p className="text-white/50 text-sm" style={I}>Within 24 hours</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-8 px-6">
+      <footer className="relative z-10 border-t border-white/5 py-8 px-6 bg-[#0a0a0a]/80">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <svg width="20" height="20" viewBox="0 0 48 48" fill="none">
               <polygon points="24,4 44,40 4,40" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinejoin="round"/>
               <circle cx="24" cy="24" r="3" fill="#C9A84C"/>
             </svg>
-            <span className="text-[#C9A84C] text-sm tracking-widest">AKARA TECHNOLOGIES</span>
+            <span className="text-[#C9A84C] text-sm" style={M}>AKARA TECHNOLOGIES</span>
           </div>
-          <span className="text-white/20 text-xs">© 2024 Akara Technologies. All rights reserved.</span>
-          <span className="text-white/20 text-xs tracking-wide">Giving shape to great ideas.</span>
+          <span className="text-white/20 text-xs" style={M}>© 2024 Akara Technologies. All rights reserved.</span>
+          <span className="text-white/20 text-xs" style={M}>Giving shape to great ideas.</span>
         </div>
       </footer>
 

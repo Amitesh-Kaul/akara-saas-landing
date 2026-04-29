@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif !important;
+  background-color: #0a0a0a;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6,
+h1 span, h2 span, h3 span,
+h1 *, h2 *, h3 * {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 300;
+}
+
+p, a, span, div, button, li {
+  font-family: 'Inter', sans-serif !important;
+}
+
+.mono-label {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 11px;
+  letter-spacing: 3px;
+}
