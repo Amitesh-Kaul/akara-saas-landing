@@ -201,10 +201,7 @@ export default function Home() {
     className="w-9 h-9 rounded-full border border-[#C9A84C]/50 flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200 text-xs" style={M}>
     ⊙
   </Link>
-  <Link to="/contact"
-    className="text-sm px-5 py-2 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200" style={M}>
-    Start a Project
-  </Link>
+
 </div>
           </div>
           <button className="md:hidden text-white/60" onClick={() => setMenuOpen(!menuOpen)}>
@@ -242,9 +239,9 @@ export default function Home() {
   className="px-8 py-4 bg-[#C9A84C] text-black text-sm font-medium tracking-widest hover:bg-[#b8973d] transition-all duration-200" style={M}>
   VIEW OUR WORK
 </a>
-            <a href="#contact" className="px-8 py-4 border border-white/20 text-white/70 text-sm hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200" style={M}>
+            <Link to="/contact" className="px-8 py-4 border border-white/20 text-white/70 text-sm hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200" style={M}>
               START A PROJECT
-            </a>
+            </Link>
           </div>
           <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
             {["UI Design", "Web Dev", "QA Testing"].map((s, i) => (
