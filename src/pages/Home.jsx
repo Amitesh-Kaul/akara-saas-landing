@@ -196,14 +196,16 @@ export default function Home() {
     </a>
   )
 ))}
-            <Link to="/login"
-  className="w-9 h-9 rounded-full border border-[#C9A84C]/50 flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200" 
-  title="Login to your account" style={M}>
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="8" r="4"/>
-    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-  </svg>
-</Link>
+            <div className="flex items-center gap-3">
+  <Link to="/login"
+    className="w-9 h-9 rounded-full border border-[#C9A84C]/50 flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200 text-xs" style={M}>
+    ⊙
+  </Link>
+  <Link to="/contact"
+    className="text-sm px-5 py-2 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200" style={M}>
+    Start a Project
+  </Link>
+</div>
           </div>
           <button className="md:hidden text-white/60" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? "✕" : "☰"}
@@ -359,44 +361,6 @@ export default function Home() {
                   <p className="text-white/50 text-xs" style={M}>{skill}</p>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section id="contact" className="relative z-10 py-24 px-6 bg-[#0a0a0a]/60 backdrop-blur-sm border-t border-white/5">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#C9A84C] opacity-5 blur-3xl pointer-events-none"/>
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <p className="text-[#C9A84C] text-xs tracking-[4px] uppercase mb-4" style={M}>Start a Project</p>
-          <h2 className="text-3xl md:text-5xl font-light mb-6 leading-tight" style={S}>
-            Ready to build<br/>something great?
-          </h2>
-          <p className="text-white/40 mb-10 leading-relaxed" style={I}>
-            Tell us about your project and we will get back to you within 24 hours.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a href="mailto:hello@akaratechnologies.com?subject=Project%20Inquiry&body=Hi%20Akara%20Team%2C"
-             className="px-10 py-4 bg-[#C9A84C] text-black text-sm font-medium hover:bg-[#b8973d] transition-all duration-200" style={M}>
-                SEND US AN EMAIL
-            </a>
-            <a href="#"
-              className="px-10 py-4 border border-white/20 text-white/60 text-sm hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200" style={M}>
-              BOOK A CALL
-            </a>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-8 justify-center">
-            <div>
-              <p className="text-white/20 text-xs mb-1" style={M}>EMAIL</p>
-              <p className="text-white/50 text-sm" style={I}>hello@akaratechnologies.com</p>
-            </div>
-            <div>
-              <p className="text-white/20 text-xs mb-1" style={M}>BASED IN</p>
-              <p className="text-white/50 text-sm" style={I}>India · Serving Globally</p>
-            </div>
-            <div>
-              <p className="text-white/20 text-xs mb-1" style={M}>RESPONSE TIME</p>
-              <p className="text-white/50 text-sm" style={I}>Within 24 hours</p>
             </div>
           </div>
         </div>
