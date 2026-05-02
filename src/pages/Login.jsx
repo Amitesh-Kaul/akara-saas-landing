@@ -86,7 +86,7 @@ function ThreeBackground() {
       renderer.dispose()
     }
   }, [])
-  return <div ref={mountRef} className="fixed inset-0 w-full h-full z-0" />
+  return <div ref={mountRef} className="absolute inset-0 w-full h-full" />
 }
 
 export default function Login() {
@@ -120,7 +120,9 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col" style={I}>
+    <div className="min-h-screen bg-[#0a0a0a] flex flex-col relative overflow-hidden" style={I}>
+  <ThreeBackground />
+  <div className="absolute inset-0 bg-[#0a0a0a]/30 z-10 pointer-events-none"/>
 
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/90 backdrop-blur-sm border-b border-white/5">
