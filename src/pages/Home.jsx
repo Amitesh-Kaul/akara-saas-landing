@@ -364,17 +364,67 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-8 px-6 bg-[#0a0a0a]/80">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <svg width="20" height="20" viewBox="0 0 48 48" fill="none">
-              <polygon points="24,4 44,40 4,40" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinejoin="round"/>
-              <circle cx="24" cy="24" r="3" fill="#C9A84C"/>
-            </svg>
-            <span className="text-[#C9A84C] text-sm" style={M}>AKARA TECHNOLOGIES</span>
+      <footer className="relative z-10 border-t border-white/5 py-12 px-6 bg-[#0a0a0a]/80">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <svg width="20" height="20" viewBox="0 0 48 48" fill="none">
+                  <polygon points="24,4 44,40 4,40" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinejoin="round"/>
+                  <circle cx="24" cy="24" r="3" fill="#C9A84C"/>
+                </svg>
+                <span className="text-[#C9A84C] text-sm" style={M}>AKARA TECHNOLOGIES</span>
+              </div>
+              <p className="text-white/30 text-xs leading-relaxed" style={I}>
+                Indian talent. Global standards. Building premium digital products for clients across US, UK and Europe.
+              </p>
+            </div>
+            {/* Contact */}
+            <div>
+              <p className="text-white/20 text-xs tracking-widest mb-4" style={M}>CONTACT US</p>
+              <div className="space-y-3">
+                <a href="mailto:hello@akaratechnologies.com?subject=Project%20Inquiry&body=Hi%20Akara%20Team%2C"
+                  className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors group" style={I}>
+                  <span className="text-[#C9A84C] text-xs" style={M}>✉</span>
+                  SEND US AN EMAIL
+                </a>
+                <Link to="/book-a-call"
+                  className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors group" style={I}>
+                  <span className="text-[#C9A84C] text-xs" style={M}>◎</span>
+                  BOOK A CALL
+                </Link>
+                <Link to="/contact"
+                  className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors group" style={I}>
+                  <span className="text-[#C9A84C] text-xs" style={M}>▣</span>
+                  START A PROJECT
+                </Link>
+              </div>
+            </div>
+            {/* Links */}
+            <div>
+              <p className="text-white/20 text-xs tracking-widest mb-4" style={M}>QUICK LINKS</p>
+              <div className="space-y-3">
+                <Link to="/careers" className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors" style={I}>
+                  <span className="text-[#C9A84C] text-xs" style={M}>→</span>
+                  Careers
+                </Link>
+                <a href="https://akara-dashboard.vercel.app" target="_blank" rel="noreferrer"
+                  className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors" style={I}>
+                  <span className="text-[#C9A84C] text-xs" style={M}>→</span>
+                  Our Work
+                </a>
+                <Link to="/login" className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors" style={I}>
+                  <span className="text-[#C9A84C] text-xs" style={M}>→</span>
+                  Login
+                </Link>
+              </div>
+            </div>
           </div>
-          <span className="text-white/20 text-xs" style={M}>© 2024 Akara Technologies. All rights reserved.</span>
-          <span className="text-white/20 text-xs" style={M}>Giving shape to great ideas.</span>
+          <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span className="text-white/20 text-xs" style={M}>© 2024 Akara Technologies. All rights reserved.</span>
+            <span className="text-white/20 text-xs" style={M}>Giving shape to great ideas.</span>
+          </div>
         </div>
       </footer>
 
