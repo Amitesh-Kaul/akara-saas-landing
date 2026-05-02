@@ -31,3 +31,12 @@ p, a, span, div, button, li {
   font-size: 11px;
   letter-spacing: 3px;
 }
+input, textarea, select {
+  color-scheme: dark;
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: white !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(255, 255, 255, 0.2) !important;
+} 
