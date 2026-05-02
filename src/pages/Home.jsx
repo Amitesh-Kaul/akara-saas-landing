@@ -196,16 +196,14 @@ export default function Home() {
     </a>
   )
 ))}
-            <div className="flex items-center gap-3">
-  <Link to="/login"
-    className="w-9 h-9 rounded-full border border-[#C9A84C]/50 flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200 text-xs" style={M}>
-    ⊙
-  </Link>
-  <Link to="/contact"
-    className="text-sm px-5 py-2 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200" style={M}>
-    Start a Project
-  </Link>
-</div>
+            <Link to="/login"
+  className="w-9 h-9 rounded-full border border-[#C9A84C]/50 flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200" 
+  title="Login to your account" style={M}>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+  </svg>
+</Link>
           </div>
           <button className="md:hidden text-white/60" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? "✕" : "☰"}
