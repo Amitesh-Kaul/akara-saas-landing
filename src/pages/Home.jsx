@@ -197,19 +197,14 @@ export default function Home() {
   )
 ))}
             <div className="flex items-center gap-3">
-  <Link to="/contact"
-    className="text-sm px-5 py-2 border border-white/20 text-white/60 hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-200" style={M}>
+  <Link to="/contact-us"
+    className="text-sm text-white/50 hover:text-[#C9A84C] transition-all duration-200" style={M}>
     Contact Us
   </Link>
   <Link to="/login"
-    className="w-9 h-9 rounded-full border-2 border-[#C9A84C] flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200"
-    title="Login" style={M}>
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-    </svg>
+    className="w-9 h-9 rounded-full border-2 border-[#C9A84C] flex items-center justify-center text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black transition-all duration-200 text-xs" style={M}>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
   </Link>
-</div>
 
 </div>
           </div>
@@ -398,10 +393,10 @@ export default function Home() {
                   <span className="text-[#C9A84C] text-xs" style={M}>✉</span>
                   SEND US AN EMAIL
                 </a>
-                <Link to="/book-a-call"
+                <Link to="/contact-us"
                   className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors group" style={I}>
                   <span className="text-[#C9A84C] text-xs" style={M}>◎</span>
-                  BOOK A CALL
+                  CONTACT US
                 </Link>
                 <Link to="/contact"
                   className="flex items-center gap-3 text-sm text-white/40 hover:text-[#C9A84C] transition-colors group" style={I}>

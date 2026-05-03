@@ -5,6 +5,8 @@ import Home from "./pages/Home"
 import Contact from "./pages/Contact"
 import Careers from "./pages/Careers"
 import Login from "./pages/Login"
+import BookACall from "./pages/BookACall"
+import ContactUs from "./pages/ContactUs"
 
 const ADMIN_EMAILS = ["amiykaul@gmail.com", "akhil@email.com"]
 
@@ -26,6 +28,8 @@ export default function App() {
         <Route path="/contact" element={<Contact />}/>
         <Route path="/careers" element={<Careers />}/>
         <Route path="/login" element={<Login />}/>
+<Route path="/book-a-call" element={<BookACall />}/>
+<Route path="/contact-us" element={<ContactUs />}/>
         <Route path="/client" element={<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-white" style={{fontFamily:"'Cormorant Garamond',serif"}}><h1 className="text-4xl font-light">Client Portal — Coming Soon</h1></div>}/>
         <Route path="/admin" element={
           <AdminRoute>
